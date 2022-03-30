@@ -122,17 +122,17 @@ void CGameOfLifeDlg::DrawLine()
 	//将画笔选入DC
 	CPen* pPen = dc.SelectObject(&penLine);
 
-	//绘制表格内的线为白色
-	for (int i = 1; i < m_Row; ++i)
-	{
-		dc.MoveTo(m_ptGameTop.x, m_ptGameTop.y + i * m_SingleSize);
-		dc.LineTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y + i * m_SingleSize);
-	}
-	for (int i = 1; i < m_Col; ++i)
-	{
-		dc.MoveTo(m_ptGameTop.x + i * m_SingleSize, m_ptGameTop.y);
-		dc.LineTo(m_ptGameTop.x + i * m_SingleSize, m_ptGameTop.y + m_Row * m_SingleSize);
-	}
+	////绘制表格内的线为白色
+	//for (int i = 1; i < m_Row; ++i)
+	//{
+	//	dc.MoveTo(m_ptGameTop.x, m_ptGameTop.y + i * m_SingleSize);
+	//	dc.LineTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y + i * m_SingleSize);
+	//}
+	//for (int i = 1; i < m_Col; ++i)
+	//{
+	//	dc.MoveTo(m_ptGameTop.x + i * m_SingleSize, m_ptGameTop.y);
+	//	dc.LineTo(m_ptGameTop.x + i * m_SingleSize, m_ptGameTop.y + m_Row * m_SingleSize);
+	//}
 	
 	//改变笔的颜色，黑色
 	penLine.DeleteObject();
@@ -140,15 +140,16 @@ void CGameOfLifeDlg::DrawLine()
 	pPen = dc.SelectObject(&penLine);
 
 	//绘制表格边框为黑色
+	//上横线
 	dc.MoveTo(m_ptGameTop.x, m_ptGameTop.y);
 	dc.LineTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y);
-
+	//下横线
 	dc.MoveTo(m_ptGameTop.x, m_ptGameTop.y + m_Row * m_SingleSize);
 	dc.LineTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y + m_Row * m_SingleSize);
-
+	//左竖线
 	dc.MoveTo(m_ptGameTop.x, m_ptGameTop.y);
 	dc.LineTo(m_ptGameTop.x, m_ptGameTop.y + m_Row * m_SingleSize);
-
+	//右竖线
 	dc.MoveTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y);
 	dc.LineTo(m_ptGameTop.x + m_Col * m_SingleSize, m_ptGameTop.y + m_Row * m_SingleSize);
 
@@ -299,12 +300,15 @@ void CGameOfLifeDlg::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	
 	//判断点击范围是否有效
-	if (point.x < m_ptGameTop.x || point.y < m_ptGameTop.y || point.x > m_rtGameRect.right || point.y > m_rtGameRect.bottom)
+	if (point.x < m_ptGameTop.x || point.y < m_ptGameTop.y || point.x >= m_rtGameRect.right || point.y >= m_rtGameRect.bottom)
 	{
 		return CDialogEx::OnLButtonUp(nFlags, point);
 	}
 	int nRow = (point.y - m_ptGameTop.y) / m_SingleSize;	//行
 	int nCol = (point.x - m_ptGameTop.x) / m_SingleSize;	//列
+	/*CString str;
+	str.Format(_T("row = %d, col = %d"), nRow, nCol);
+	MessageBox(str);*/
 
 	//设置格子对应细胞的生命状态
 	m_LGameC.SetCellStatus(nRow, nCol);
